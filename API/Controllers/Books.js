@@ -40,11 +40,17 @@ exports.addBook = function addBook(req, res, next) {
 };
 
 exports.getBookById = function getBookById(req, res, next) {
-  res.status(200).json({
-    name: "Get Book By Id Controller",
-    bookId: req.params.id,
-    message: "The Get Book By Id Controller Has Been Hit!",
-  });
+  Book.findById(req.params.id)
+    .exec()
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((error) => {
+      res.status(404).json({
+        message: "Some Error Occurred While Fetching the Book By Given ID!",
+        error: error,
+      });
+    });
 };
 
 exports.updateBookById = function updateBookById(req, res, next) {
