@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const booksRoutes = require("./API/Routes/Books");
 const application = express();
 
 application.use(morgan("dev"));
@@ -17,5 +18,7 @@ application.use(function handlingEmptyRequest(req, res, next) {
   }
   next();
 });
+
+application.use("/books", booksRoutes);
 
 module.exports = application;
