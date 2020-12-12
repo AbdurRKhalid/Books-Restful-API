@@ -1,8 +1,17 @@
+const Book = require("../Models/Book");
+
 exports.getAllBooks = function getAllBooks(req, res, next) {
-  res.status(200).json({
-    name: "Get All Books Controller",
-    message: "The Get All Books Controller Has Been Hit!",
-  });
+  Book.find()
+    .exec()
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((error) => {
+      res.status(404).json({
+        error: error,
+        message: "Some Error Occured While Fetching the Books!",
+      });
+    });
 };
 
 exports.addBook = function addBook(req, res, next) {
