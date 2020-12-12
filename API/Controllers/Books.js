@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Book = require("../Models/Book");
 
 exports.getAllBooks = function getAllBooks(req, res, next) {
@@ -15,10 +16,27 @@ exports.getAllBooks = function getAllBooks(req, res, next) {
 };
 
 exports.addBook = function addBook(req, res, next) {
-  res.status(200).json({
-    name: "Add Book Controller",
-    message: "The Add Book Controller Has Been Hit!",
+  var newBook = new Book({
+    _id: mongoose.Types.ObjectId(),
+    name: req.body.name,
+    author: req.body.author,
+    publisher: req.body.publisher,
   });
+
+  newBook
+    .save()
+    .then((result) => {
+      res.status(200).json({
+        message: "The Book has Been Saved Successfully!",
+        result: result,
+      });
+    })
+    .catch((error) => {
+      res.status(404).json({
+        message: "The error occurred while Adding the Book!",
+        error: error,
+      });
+    });
 };
 
 exports.getBookById = function getBookById(req, res, next) {
