@@ -1,3 +1,4 @@
+const { json } = require("body-parser");
 const mongoose = require("mongoose");
 const Book = require("../Models/Book");
 
@@ -82,9 +83,19 @@ exports.updateBookById = function updateBookById(req, res, next) {
 };
 
 exports.deleteBookById = function deleteBookById(req, res, next) {
-  res.status(200).json({
-    name: "Delete Book By Id!",
-    bookId: req.params.id,
-    message: "The Delete Book By Id Controller Has Been Hit!",
-  });
+  Book.remove({
+    _id: req.params.id,
+  })
+    .exec()
+    .then((result) => {
+      res.status(200).json({
+        message: "The Book Has Been Deleted Successfully!",
+      });
+    })
+    .catch((error) => {
+      res.status(404).json({
+        message: "Error Occurred While Deleting the Book!",
+        error: error,
+      });
+    });
 };
