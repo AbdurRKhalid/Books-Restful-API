@@ -54,11 +54,31 @@ exports.getBookById = function getBookById(req, res, next) {
 };
 
 exports.updateBookById = function updateBookById(req, res, next) {
-  res.status(200).json({
-    name: "Update Book By Id Controller!",
-    bookId: req.params.id,
-    message: "The Update Book By Id Controller has Been Hit!",
-  });
+  Book.update(
+    {
+      _id: req.params.id,
+    },
+    {
+      $set: {
+        name: req.body.name,
+        author: req.body.author,
+        publisher: req.body.publisher,
+      },
+    }
+  )
+    .exec()
+    .then((data) => {
+      res.status(200).json({
+        message: "The Book Updated Successfully!",
+        result: data,
+      });
+    })
+    .catch((error) => {
+      res.status(404).json({
+        message: "The Error Occurred While Updating the Book!",
+        error: error,
+      });
+    });
 };
 
 exports.deleteBookById = function deleteBookById(req, res, next) {
